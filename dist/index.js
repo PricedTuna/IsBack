@@ -9,6 +9,7 @@ const car_routes_1 = __importDefault(require("./src/routes/car-routes"));
 // configures dotenv to work in your application
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use(express_1.default.json()); // Para que acepte body por metodos POST
 const PORT = process.env.PORT;
 app.use('/cars', car_routes_1.default);
 app.listen(PORT, () => {

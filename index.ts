@@ -5,6 +5,7 @@ import autos_routes from "./src/routes/car-routes"
 // configures dotenv to work in your application
 dotenv.config();
 const app = express();
+app.use(express.json()); // Para que acepte body por metodos POST
 
 const PORT = process.env.PORT;
 
