@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import { ICar } from "../interfaces/ICar";
+import { plainToInstance } from "class-transformer";
+import { CreateCarDto } from "../dtos/car/CreateCarDto";
+import { validate } from "class-validator";
 
 // Simulación de una base de datos en memoria
 let cars: ICar[] = [
@@ -25,15 +28,17 @@ export const getCarById = (req: Request, res: Response) => {
 };
 
 // Crear un nuevo coche
-export const createCar = (req: Request, res: Response) => {
-  const newCar: ICar = {
-    id: cars.length + 1, // Simular autoincremento
-    brand: req.body.brand,
-    model: req.body.model,
-    year: req.body.year,
-  };
+export const createCar = async (req: Request, res: Response) => {
 
-  cars.push(newCar);
+  const carData = plainToInstance(CreateCarDto, req.body);
+  const errors = await validate(carData);
+
+  if (errors.length > 0) {
+    return res.status(400).json({ message: "Validation failed", errors });
+  }
+
+
+  const newCar = { id: Date.now(), ...carData }; // Simula un ID único
   res.status(201).json(newCar);
 };
 
