@@ -21,7 +21,7 @@ export class Usuarios {
   correo: string;
 
   @Column("varchar", { name: "contraseña", length: 255 })
-  contraseA: string;
+  password: string;
 
   @Column("int", { name: "id_empleado", nullable: true })
   idEmpleado: number | null;

@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
-import autos_routes from "./routes/CarRoutes";
+import autosRoutes from "./routes/AutoRoutes";
+import usuariosRoutes from "./routes/UsuarioRoutes";
 import { MyDataSource } from "./database/AppDataSource";
+
 
 // Configurates and start database connection
 MyDataSource
@@ -20,7 +22,9 @@ app.use(express.json()); // Para que acepte body por metodos POST
 
 const PORT = process.env.PORT;
 
-app.use("/cars", autos_routes);
+// RUTAS UTILIZADAS
+app.use("/autos", autosRoutes);
+app.use("/usuarios", usuariosRoutes)
 
 app
   .listen(PORT, () => {
