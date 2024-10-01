@@ -1,30 +1,28 @@
 import { Request, Response } from "express";
-import { ICar } from "../interfaces/ICar";
 import { plainToInstance } from "class-transformer";
 import { CreateCarDto } from "../dtos/car/CreateCarDto";
 import { validate } from "class-validator";
+import { MyDataSource } from "../database/AppDataSource";
+import { Car } from "../entities/Car.entity";
 
-// Simulación de una base de datos en memoria
-let cars: ICar[] = [
-  { id: 1, brand: "Toyota", model: "Corolla", year: 2020 },
-  { id: 2, brand: "Honda", model: "Civic", year: 2021 }
-];
+const _carRepository = MyDataSource.getRepository(Car);
 
 // Obtener todos los coches
-export const getAllCars = (_req: Request, res: Response) => {
+export const getAllCars = async (_req: Request, res: Response) => {
+  const cars = await _carRepository.find();
   res.json(cars);
 };
 
 // Obtener un coche por ID
-export const getCarById = (req: Request, res: Response) => {
-  const carId = parseInt(req.params.id);
-  const car = cars.find((c) => c.id === carId);
+export const getCarById = async (req: Request, res: Response) => {
+  const carId = req.params.id;
+  const carFound = await _carRepository.findOneBy({id: carId});
   
-  if (!car) {
+  if (!carFound) {
     res.status(404).json({ message: "Car not found" });
   }
 
-  res.json(car);
+  res.json(carFound);
 };
 
 // Crear un nuevo coche
@@ -34,15 +32,22 @@ export const createCar = async (req: Request, res: Response) => {
   const errors = await validate(carData);
 
   if (errors.length > 0) {
-    return res.status(400).json({ message: "Validation failed", errors });
+    res.status(400).json({ message: "Validation failed A", errors });
+    return;
   }
+  
 
+  const carSaved = await _carRepository.create(carData);
+  const results = await _carRepository.save(carSaved);
 
-  const newCar = { id: Date.now(), ...carData }; // Simula un ID único
-  res.status(201).json(newCar);
+  console.log(JSON.stringify(carSaved, null, 2)); // !
+
+  res.status(201).json(results);
 };
 
 // Actualizar un coche existente
+/*
+
 export const updateCar = (req: Request, res: Response) => {
   const carId = parseInt(req.params.id);
   const carIndex = cars.findIndex((c) => c.id === carId);
@@ -69,3 +74,5 @@ export const deleteCar = (req: Request, res: Response) => {
   cars.splice(carIndex, 1);
   res.status(204).send();
 };
+
+*/

@@ -10,5 +10,5 @@ export class CreateCarDto {
   @IsInt()
   @Min(1886)
   @Max(new Date().getFullYear())
-  year!: number;
+  year!: string;
 }

@@ -3,9 +3,9 @@ import {
   getAllCars, 
   getCarById, 
   createCar, 
-  updateCar, 
-  deleteCar 
-} from "../controller/car.controller";
+  // updateCar, 
+  // deleteCar 
+} from "../controller/Car.controller";
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.get("/hola", (_req, res) => {
 router.get("/", getAllCars);          // Obtener todos los coches
 router.get("/:id", getCarById);       // Obtener un coche por ID
 router.post("/", createCar);          // Crear un nuevo coche
-router.put("/:id", updateCar);        // Actualizar un coche existente
-router.delete("/:id", deleteCar);     // Eliminar un coche por ID
+// router.put("/:id", updateCar);        // Actualizar un coche existente
+// router.delete("/:id", deleteCar);     // Eliminar un coche por ID
 
 export default router;
