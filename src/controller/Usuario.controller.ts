@@ -14,13 +14,22 @@ export const getAllUsers = async (_req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
   const id = +req.params.id;
-  const userFound = await _usuarioRepository.findOneBy({idUsuario: id});
-  
-  if (!userFound) {
-    res.status(404).json({ message: "User not found" });
-  }
 
-  res.json(userFound);
+  try {
+    const userFound = await _usuarioRepository.findOneBy({ idUsuario: id });
+
+    if (!userFound) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.json(userFound);
+    return;
+  } catch (error) {
+    console.error("Error getting user from database ", error);
+    res.status(500).json({ message: "An unexpected error occurred" });
+    return;
+  }
 };
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -33,16 +42,18 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const userFound = await _usuarioRepository.findOneBy({correo: loginUserData.email, password: loginUserData.password});
+    const userFound = await _usuarioRepository.findOneBy({
+      correo: loginUserData.email,
+      password: loginUserData.password,
+    });
     console.log(JSON.stringify(userFound, null, 2));
     res.json(userFound);
     return;
   } catch (error) {
-    res.status(404).json({message: "User not found"});
+    res.status(404).json({ message: "User not found" });
   }
 
-  res.status(404).json({message: "User not found"});
-
+  res.status(404).json({ message: "User not found" });
 };
 
 export const craeteAdminUser = async (_req: Request, res: Response) => {
@@ -50,15 +61,13 @@ export const craeteAdminUser = async (_req: Request, res: Response) => {
     nombreUsuario: "admin",
     correo: "admin@admin.com",
     password: "admin",
-  }
+  };
 
   const userSaved = await _usuarioRepository.create(newUser);
   const results = await _usuarioRepository.save(userSaved);
 
-  console.log(JSON.stringify(userSaved, null, 2)); // !
-
   res.status(201).json(results);
-}
+};
 
 // Crear un nuevo coche
 // export const createCar = async (req: Request, res: Response) => {
@@ -70,7 +79,6 @@ export const craeteAdminUser = async (_req: Request, res: Response) => {
 //     res.status(400).json({ message: "Validation failed A", errors });
 //     return;
 //   }
-  
 
 //   const carSaved = await _usuarioRepository.create(carData);
 //   const results = await _usuarioRepository.save(carSaved);
