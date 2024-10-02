@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import autosRoutes from "./routes/AutoRoutes";
 import usuariosRoutes from "./routes/UsuarioRoutes";
 import { MyDataSource } from "./database/AppDataSource";
+import cors from 'cors';
 
 
 // Configurates and start database connection
@@ -21,6 +22,13 @@ const app = express();
 app.use(express.json()); // Para que acepte body por metodos POST
 
 const PORT = process.env.PORT;
+
+// CORS
+const corsOptions = {
+  origin: 'http://localhost:5173', // Solo permitir este dominio
+};
+
+app.use(cors(corsOptions));
 
 // RUTAS UTILIZADAS
 app.use("/autos", autosRoutes);

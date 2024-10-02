@@ -37,7 +37,7 @@ export class Autos {
   @Column("date", { name: "vencimiento_poliza" })
   vencimientoPoliza: string;
 
-  @Column("char", { name: "estatus", length: 2 })
+  @Column("char", { name: "estatus", length: 2, default: 'A' })
   estatus: string;
 
   @Column("timestamp", {

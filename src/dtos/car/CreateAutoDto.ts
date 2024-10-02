@@ -7,7 +7,7 @@ export class CreateAutoDto {
   nombreModelo: string
 
   @IsString()
-  @MaxLength(1)
+  @MaxLength(30)
   yearModelo: string;
 
   @IsString()
@@ -31,9 +31,5 @@ export class CreateAutoDto {
 
   @IsString()
   vencimientoPoliza: string;
-
-  @IsString()
-  @MaxLength(1)
-  estatus: string;
 
 }
